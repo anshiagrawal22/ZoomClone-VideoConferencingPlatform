@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+*/node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Next.js
+.next/
+*/.next/
+out/
+build/
+
+# Python & virtual environment
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# SQLite Database
+*.db-journal
+
+# Environment variables
+.env*.local
+
+# System & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Typescript cache
+*.tsbuildinfo

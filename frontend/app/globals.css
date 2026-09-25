@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-zoom: system-ui, "SF Pro", "Segoe UI", "Almaden Sans", Roboto, Ubuntu, Helvetica, Arial, sans-serif;
+  --background: #ffffff;
+  --foreground: #1c1c1c;
+}
+
+body {
+  color: var(--foreground);
+  background: #ffffff;
+  font-family: var(--font-zoom);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
