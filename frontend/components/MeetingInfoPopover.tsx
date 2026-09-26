@@ -23,7 +23,7 @@ export default function MeetingInfoPopover({
 
   const inviteLink = typeof window !== "undefined"
     ? `${window.location.origin}/join/${meetingCode.replace(/\D/g, "")}`
-    : `http://localhost:3000/join/${meetingCode.replace(/\D/g, "")}`;
+    : `http://localhost:3001/join/${meetingCode.replace(/\D/g, "")}`;
 
   function handleCopy() {
     navigator.clipboard?.writeText(inviteLink);

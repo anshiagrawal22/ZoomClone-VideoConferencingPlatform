@@ -1,4 +1,7 @@
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const RAW_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+const BASE = RAW_BASE.replace(/\/+$/, "");
+
+
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

@@ -51,7 +51,7 @@ export default function MainPage() {
       const data = await fetchMeetings(tab);
       setMeetings(data);
     } catch {
-      setError("Could not load meetings. Is the backend running on port 8000?");
+      setError("Could not load meetings. Please check if the backend API service is running.");
       setMeetings([]);
     } finally {
       setLoading(false);

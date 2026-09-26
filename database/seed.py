@@ -14,7 +14,7 @@ try:
 except ImportError:
     from database import Base, engine
 
-FRONTEND_ORIGIN = "http://localhost:3000"
+FRONTEND_ORIGIN = "http://localhost:3001"
 
 
 def invite_link(code: str) -> str:

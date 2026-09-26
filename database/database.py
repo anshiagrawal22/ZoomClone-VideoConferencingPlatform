@@ -5,7 +5,11 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 BASE_DIR = Path(__file__).resolve().parent
 DB_PATH = os.getenv("DATABASE_PATH", str(BASE_DIR / "zoom.db"))
+db_file = Path(DB_PATH)
+db_file.parent.mkdir(parents=True, exist_ok=True)
+
 SQLALCHEMY_DATABASE_URL = f"sqlite:///{DB_PATH}"
+
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
