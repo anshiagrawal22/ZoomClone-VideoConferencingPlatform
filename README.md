@@ -1,84 +1,103 @@
-# Zoom Workplace Clone
+# 🖥️ Zoom Workplace Clone
 
-A fullstack Zoom Workplace web client clone built with Next.js (TypeScript, Tailwind CSS), FastAPI (Python), and SQLite (SQLAlchemy).
+A full-stack Zoom Workplace-inspired web application featuring an in-shell meeting experience, video conferencing controls, and meeting management. Built with Next.js 14, FastAPI, SQLAlchemy, and SQLite, it replicates the modern Zoom web client interface with persistent meeting scheduling and participant tracking.
 
----
+## 🛠 Tech Stack
 
-## Project Structure
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 14 (App Router), TypeScript, React 18, Tailwind CSS |
+| **Backend** | FastAPI, Python 3, Uvicorn |
+| **Database & ORM** | SQLite, SQLAlchemy 2.0, Pydantic |
+| **Media APIs** | Web APIs (`getUserMedia`, `getDisplayMedia`) |
+| **Deployment** | Vercel (Frontend), Render (Backend) |
 
-```
-├── frontend/             # Next.js 14 Web Application
-│   ├── app/              # Next.js App Router (Home, Join, In-Meeting views)
-│   ├── components/       # UI Components (Sidebar, Header, Chat, MeetingRoom, Modals)
-│   ├── lib/              # API clients & client-side state
-│   ├── tailwind.config.ts
-│   └── package.json
-│
-├── backend/              # FastAPI REST API
-│   ├── main.py           # API routes & meeting endpoints
-│   ├── schemas.py        # Pydantic request & response schemas
-│   └── requirements.txt  # Python backend dependencies
-│
-└── database/             # SQLite & Database Models
-    ├── database.py       # SQLAlchemy engine & session setup
-    ├── models.py         # Meeting and Participant models
-    ├── seed.py           # Database initializer
-    └── zoom.db           # SQLite database file
-```
+## 🚀 Setup Instructions
 
----
+### Prerequisites
+- Node.js v18+
+- Python v3.10+ & pip
 
-## Getting Started
-
-### 1. Database & Backend Setup
-
-Navigate to the `backend` directory or root:
-
+### Backend Setup (Local Port 8001)
 ```bash
-# Install dependencies
-pip install -r backend/requirements.txt
-
-# Initialize the database
-python database/seed.py
-
-# Start FastAPI server (runs on port 8000)
 cd backend
-python -m uvicorn main:app --reload --port 8000
+pip install -r requirements.txt
+python ../database/seed.py
+python main.py
 ```
 
-The API documentation will be accessible at:
-- **Interactive Swagger Docs**: `http://localhost:8000/docs`
-- **ReDoc**: `http://localhost:8000/redoc`
-
-### 2. Frontend Setup
-
-Navigate to the `frontend` directory:
-
+### Frontend Setup
 ```bash
 cd frontend
-
-# Install npm dependencies (if not already installed)
 npm install
-
-# Start Next.js development server (runs on port 3000)
 npm run dev
 ```
 
-Open `http://localhost:3000` in your browser.
+### Environment Variables
+Configure `frontend/.env.local`:
+```env
+# Local Development
+NEXT_PUBLIC_API_URL=http://localhost:8001
 
----
+# Production (Vercel)
+NEXT_PUBLIC_API_URL=https://zoomclone-videoconferencingplatform.onrender.com
+```
 
-## Features
+## 🏗 Architecture Overview
 
-- **In-Shell Meeting Experience**: The meeting view (video canvas, scoped header, bottom toolbar) renders seamlessly inside the Home tab shell without replacing the top navbar or sidebar navigation.
-- **Zoom Workplace Pixel-Matched Design**:
-  - Top full-width navigation bar with search, `Ctrl+K` hint, product dropdown, and user avatar.
-  - Collapsible left sidebar (`Home`, `Team Chat`, `Meetings`, `Contacts`, `Settings`).
-  - Home dashboard with live digital clock, 3 primary action buttons (**Back to Meeting / New Meeting**, **Join**, **Schedule**), and calendar section with authentic beach umbrella empty state.
-  - Floating self-view widget with live camera preview and avatar fallback.
-- **Interactive Meeting Capabilities**:
-  - Live local camera & microphone media capture via `navigator.mediaDevices.getUserMedia`.
-  - Screen sharing via `navigator.mediaDevices.getDisplayMedia`.
-  - Floating emoji reactions with animated upwards physics.
-  - In-meeting chat panel & participants management panel.
-  - Instant and scheduled meeting lifecycles with backend SQLite persistence.
+```text
+User
+ ↓
+Vercel Frontend (Next.js 14)
+ ↓ HTTPS
+Render FastAPI Backend
+ ↓
+SQLAlchemy ORM
+ ↓
+SQLite Database
+```
+
+```text
+ZoomClone/
+├── frontend/             # Next.js App Router UI & components
+│   ├── app/              # Shell, /join/[code], and /meeting/[code] routes
+│   ├── components/       # Header, Sidebar, Dashboard & MeetingRoom UI
+│   └── lib/              # API client & screen share state bridge
+├── backend/              # FastAPI REST service & Pydantic schemas
+└── database/             # SQLite engine, models & database seeder
+```
+
+- **In-Shell Architecture**: Active meetings render within the main workspace shell without dismantling top header or left sidebar navigation.
+- **Decoupled Backend**: Client communicates with FastAPI over REST endpoints; media capture runs locally via HTML5 Web APIs.
+
+## 🗄 Database Schema
+
+| Table | Columns | Relationship |
+|---|---|---|
+| **`meetings`** | `id` (PK), `meeting_code` (Unique), `title`, `description`, `host_name`, `meeting_type`, `scheduled_at`, `duration_minutes`, `status`, `invite_link`, `created_at`, `ended_at` | 1-to-Many with `participants` |
+| **`participants`** | `id` (PK), `meeting_id` (FK), `name`, `is_host`, `joined_at` | Belongs to `meetings` |
+
+## 📡 API Overview
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `POST` | `/api/meetings/instant` | Create a new instant meeting |
+| `POST` | `/api/meetings/scheduled` | Schedule a future meeting |
+| `GET` | `/api/meetings?status=upcoming\|recent` | Fetch upcoming or completed meetings |
+| `GET` | `/api/meetings/{code}` | Retrieve meeting details by code |
+| `POST` | `/api/meetings/{code}/join` | Add participant to a meeting |
+| `POST` | `/api/meetings/{code}/end` | End meeting & mark status completed |
+
+## 🎮 Core Features
+
+- **Workspace Dashboard**: Live digital clock, action tiles (New Meeting, Join, Schedule), upcoming/recent meeting tabs, and calendar empty state.
+- **In-Shell Meeting View**: Scoped meeting header, grid toggle, dark teal avatar fallback, and meeting info popover with invite copy.
+- **Media Controls**: Local camera and microphone toggles via `getUserMedia` with device selection menus.
+- **Screen Sharing**: Native window and screen streaming via `getDisplayMedia`.
+- **In-Meeting Engagement**: Side drawers for active Participants and Chat, plus floating animated emoji reactions (`👏`, `👍`, `❤️`, `😂`, `😮`, `🎉`).
+
+## 📝 Assumptions
+
+- **Ephemeral Cloud Storage**: SQLite is used for local database storage; on free-tier Render hosting, database persistence resets on container restart.
+- **Browser-Local Media Streams**: Media streaming relies on local browser Web APIs rather than a centralized WebRTC SFU media server.
+- **Simplified Guest Auth**: Participants join with display names rather than full OAuth/JWT authentication.
